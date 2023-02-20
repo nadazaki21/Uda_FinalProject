@@ -372,11 +372,11 @@ jobs:
             sudo apt install ansible 
 
       - run:
-        name: Install Python
-        command: |
-          echo "installing pyton3"
-          sudo apt install python3
-        
+          name: Install Python
+          command: |
+            echo "installing pyton3"
+            sudo apt install python3
+          
       - run: ansible --version 
       
       - attach_workspace:
