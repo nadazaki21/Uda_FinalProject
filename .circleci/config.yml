@@ -321,9 +321,7 @@ jobs:
       - run:
           name: Install Ansible
           command: |
-            echo " installingg ansible"
-            sudo apt install software-properties-common 
-            sudo add-apt-repository --yes --update ppa:ansible/ansible
+            
             sudo apt install ansible 
 
       - run:
@@ -395,16 +393,18 @@ jobs:
       - run: ansible --version 
 
       - run:
+        name: Configure server
+        command: |
+          ansible-playbook -i ~/project/inv/inventory.txt  ~/project/deploy-backend.yml
+
+      - run:
           name: Deploy backend
           command: |
             npm install
             pm2 stop default
             pm2 start npm -- start
 
-      - run:
-          name: Configure server
-          command: |
-            ansible-playbook -i ~/project/inv/inventory.txt  ~/project/deploy-backend.yml
+     
 
        
 
@@ -526,5 +526,12 @@ workflows:
                   
       #         # fi
       #         # curl --insecure  https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5}      
+
+
+
+
+      # echo " installingg ansible"
+      #       sudo apt install software-properties-common 
+      #       sudo add-apt-repository --yes --update ppa:ansible/ansible
 
                   
