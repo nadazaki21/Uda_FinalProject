@@ -422,7 +422,6 @@ jobs:
             sudo apt install ansible 
 
             
-    
       - run: ansible --version 
 
       - attach_workspace:
