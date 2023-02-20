@@ -298,7 +298,7 @@ jobs:
             cd /home/circleci/project/backend
             ls -la /home/circleci/project/backend
             npm install
-            #npm run migrations > migrations_dump.txt
+            npm run migrations > migrations_dump.txt
 
 
 
@@ -412,8 +412,7 @@ jobs:
           name: Install dependencies
           command: |
             
-            sudo apt update 
-            sudo apt upgrade 
+            npm install pm2
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             sudo ./aws/install
@@ -422,7 +421,7 @@ jobs:
             echo " installing ansible"
             sudo apt install ansible 
 
-            sudo apt install pm2
+            
     
       - run: ansible --version 
 
