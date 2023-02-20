@@ -412,7 +412,7 @@ jobs:
           name: Install dependencies
           command: |
             
-            npm install pm2
+            
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             sudo ./aws/install
@@ -431,6 +431,11 @@ jobs:
           name: Configure server
           command: |
               ansible-playbook -i ~/project/inv/inventory.txt  ~/project/deploy-backend.yml
+
+      - run:
+          name: Deploy backend
+          command: |
+              sudo npm i -g pm2
 
       - run:
           name: Deploy backend
