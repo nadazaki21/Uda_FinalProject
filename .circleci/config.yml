@@ -32,7 +32,7 @@ commands:
             Check=$(curl --insecure  https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5})
             if (( $Check == 1 ));
             then
-              cd  cd /home/circleci/project/backend
+              cd /home/circleci/project/backend
               npm install
               npm run migrations:revert
             fi
@@ -316,30 +316,30 @@ jobs:
 
             
 
-      - run:
+      # - run:
           
-          command: |
-            cd /home/circleci/project/backend
-            ls -la /home/circleci/project/backend
-            npm install
-            npm run migrations > migrations_dump.txt
+      #     command: |
+      #       cd /home/circleci/project/backend
+      #       ls -la /home/circleci/project/backend
+      #       npm install
+      #       npm run migrations > migrations_dump.txt
 
-          no_output_timeout: 7m
+      #     no_output_timeout: 7m
           
             
   
           
 
 
-      - run:
-          name: Send migration status to kvdb.io OR memstash.io
-          command: |   
-              if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
-              then
-                curl https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5} -d 1  
+      # - run:
+      #     name: Send migration status to kvdb.io OR memstash.io
+      #     command: |   
+      #         if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
+      #         then
+      #           curl https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5} -d 1  
                   
-              fi
-              curl --insecure  https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5}      
+      #         fi
+      #         curl --insecure  https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5}      
 
           
        
@@ -352,60 +352,60 @@ jobs:
 
   
 
-#   deploy-frontend:
-#     docker:
-#       - image: cimg/base:2023.02
-    # steps:
-    #   - checkout 
-    #   - add_ssh_keys:
+  deploy-frontend:
+    docker:
+      - image: cimg/base:2023.02
+    steps:
+      - checkout 
+      - add_ssh_keys:
               
-    #       fingerprints: 
+          fingerprints: 
             
-    #         - "55:f3:3d:67:45:24:b3:9f:b8:17:3f:c4:75:fd:e2:07"
+            - "55:f3:3d:67:45:24:b3:9f:b8:17:3f:c4:75:fd:e2:07"
       
-    #   - run:
-    #       name: Install dependencies
-    #       command: |
-    #         sudo apt install -y tar gzip
-    #         echo "installing AWS CLI "
-    #         curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-    #         unzip awscliv2.zip
-    #         sudo ./aws/install
-    #         echo " installingg ansible"
-    #         sudo apt install software-properties-common 
-    #         sudo add-apt-repository --yes --update ppa:ansible/ansible
-    #         sudo apt install ansible 
-    #         echo "installing pyton3"
-    #         sudo apt install python3
+      - run:
+          name: Install dependencies
+          command: |
+            sudo apt install -y tar gzip
+            echo "installing AWS CLI "
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+            echo " installingg ansible"
+            sudo apt install software-properties-common 
+            sudo add-apt-repository --yes --update ppa:ansible/ansible
+            sudo apt install ansible 
+            echo "installing pyton3"
+            sudo apt install python3
         
-    #   - run: ansible --version 
+      - run: ansible --version 
       
-    #   - attach_workspace:
-    #       at: ~/
+      - attach_workspace:
+          at: ~/project/inv
     
-    #   - run: cat ~/project/.circleci/ansible/inventory.txt
-#       - run:
-#           name: Get backend url
-#           command: |
-#             
-                # export BACKEND_IP=$(cat )
-                # export API_URL="http://${BACKEND_IP}:3030"
-                # echo "API_URL = ${API_URL}"
-                # echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
-                # cat frontend/.env
-#       - run:
-#           name: Deploy frontend objects
-#           command: |
-  #           cd frontend
-              # npm install
-              # npm run build
-              # tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:5}".tar.gz dist
-              # aws s3 cp dist s3://uda-n15 --recursive
+      - run: cat ~/project/inv/inventory.txt
+      - run:
+          name: Get backend url
+          command: |
+            
+                export BACKEND_IP=$(cat )
+                export API_URL="http://${BACKEND_IP}:3030"
+                echo "API_URL = ${API_URL}"
+                echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
+                cat frontend/.env
+      - run:
+          name: Deploy frontend objects
+          command: |
+              cd frontend
+              npm install
+              npm run build
+              tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:5}".tar.gz dist
+              aws s3 cp dist s3://uda-n15 --recursive
 
 
-#    #      - destroy_environment_backend
+      - destroy_environment_backend
 
-      # - destroy_environment_frontend
+      - destroy_environment_frontend
 
   
 
@@ -508,8 +508,8 @@ workflows:
           requires: [deploy-infrastructure]
       - run-migrations:
           requires: [configure-infrastructure]
-      # - deploy-frontend:
-      #     requires: [run-migrations]
+      - deploy-frontend:
+          requires: [run-migrations]
       # - deploy-backend:
       #     requires: [run-migrations]
       # - smoke-test:
