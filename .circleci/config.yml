@@ -246,20 +246,12 @@ jobs:
               
               sudo apt install ansible 
 
-            # yum install -y python3 
-
-            # python3 -m pip -V
             
-            # echo " installingg ansible"
-           
-            
-            # python3 -m pip install --user ansible
         
       - run: ansible --version 
       
       
-      # - restore_cache:
-      #     keys: [ok]
+    
 
       - attach_workspace:
           at: ~/project/inv
@@ -364,17 +356,24 @@ jobs:
             - "55:f3:3d:67:45:24:b3:9f:b8:17:3f:c4:75:fd:e2:07"
       
       - run:
-          name: Install dependencies
+          name: Install awscli
           command: |
             sudo apt install -y tar gzip
             echo "installing AWS CLI "
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             sudo ./aws/install
+      - run:
+          name: Install Ansible
+          command: |
             echo " installingg ansible"
             sudo apt install software-properties-common 
             sudo add-apt-repository --yes --update ppa:ansible/ansible
             sudo apt install ansible 
+
+        - run:
+          name: Install Python
+          command: |
             echo "installing pyton3"
             sudo apt install python3
         
@@ -388,7 +387,7 @@ jobs:
           name: Get backend url
           command: |
             
-                export BACKEND_IP=$(cat )
+                export BACKEND_IP=$(aws ec2 describe-instances    --query 'Reservations[*].Instances[*].PublicIpAddress'   --filters "Name=tag:Name,Values=Uda"    --output text  )
                 export API_URL="http://${BACKEND_IP}:3030"
                 echo "API_URL = ${API_URL}"
                 echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
@@ -396,7 +395,7 @@ jobs:
       - run:
           name: Deploy frontend objects
           command: |
-              cd frontend
+              cd /home/circleci/project/frontend
               npm install
               npm run build
               tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:5}".tar.gz dist
@@ -412,22 +411,51 @@ jobs:
 
 
 
-#   deploy-backend:
-#     docker:
-#       # Docker image here that supports Ansible
-#     steps:
-#       # Checkout code from git
-#       # Add ssh keys with fingerprint
-#       # attach workspace
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # your code here
-#       - run:
-#           name: Deploy backend
-#           command: |
-#             # your code here
-#       # Here's where you will add some code to rollback on failure  
+  deploy-backend:
+     docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout 
+      - add_ssh_keys:
+              
+          fingerprints: 
+            
+            - "55:f3:3d:67:45:24:b3:9f:b8:17:3f:c4:75:fd:e2:07"
+      
+      - run:  sudo apt install tar gzip #yum install -y tar gzip
+      - run:
+          name: Install dependencies
+          command: |
+              
+              sudo apt install tar ggzip
+              echo "installing AWS CLI "
+              curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+              unzip awscliv2.zip
+              sudo ./aws/install
+
+
+              echo " installing ansible"
+              sudo apt install ansible 
+      
+      - run: ansible --version 
+
+      - run:
+          name: Deploy backend
+          command: |
+            npm install
+            pm2 stop default
+            pm2 start npm -- start
+
+       
+
+      - destroy_environment_backend
+
+      - destroy_environment_frontend
+
+
+
+
+
 
 #   smoke-test:
 #     docker:
