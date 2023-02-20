@@ -399,6 +399,8 @@ jobs:
 
             echo " installing ansible"
             sudo apt install ansible 
+
+            sudo apt install pm2
     
       - run: ansible --version 
 
@@ -423,7 +425,7 @@ jobs:
 
       - destroy_environment_backend
 
-      #- destroy_environment_frontend
+      - destroy_environment_frontend
 
 
 
