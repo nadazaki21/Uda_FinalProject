@@ -286,36 +286,36 @@ jobs:
             unzip awscliv2.zip
             sudo ./aws/install
     
-              # - run:
-              #     name: Pre Run migrations
-              #     no_output_timeout: 7m
-              #     command: |
-              #       cd /home/circleci/project/backend
-              #       pwd 
+            # - run:
+            #     name: Pre Run migrations
+            #     no_output_timeout: 7m
+            #     command: |
+            #       cd /home/circleci/project/backend
+            #       pwd 
 
-              #       ls -la /home/circleci/project/backend
-                    
-
-              #       npm install
-              # - run:
+            #       ls -la /home/circleci/project/backend
                   
-              #     command: |
-              #       cd /home/circleci/project/backend
-              #       ls -la /home/circleci/project/backend
-              #       npm install
-              #       npm run migrations > migrations_dump.txt
 
-              #     no_output_timeout: 7m
+            #       npm install
+            # - run:
+                
+            #     command: |
+            #       cd /home/circleci/project/backend
+            #       ls -la /home/circleci/project/backend
+            #       npm install
+            #       npm run migrations > migrations_dump.txt
 
-              # - run:
-              #     name: Send migration status to kvdb.io OR memstash.io
-              #     command: |   
-              #         if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
-              #         then
-              #           curl https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5} -d 1  
-                          
-              #         fi
-              #         curl --insecure  https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5}      
+            #     no_output_timeout: 7m
+
+            # - run:
+            #     name: Send migration status to kvdb.io OR memstash.io
+            #     command: |   
+            #         if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
+            #         then
+            #           curl https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5} -d 1  
+                        
+            #         fi
+            #         curl --insecure  https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5}      
 
                   
               
