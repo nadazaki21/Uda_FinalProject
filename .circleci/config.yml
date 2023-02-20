@@ -318,12 +318,12 @@ jobs:
       - run:
           # no_output_timeout: 7m
           command: |
-          cd /home/circleci/project/backend
-          ls -la /home/circleci/project/backend
-          npm install
-          npm run migrations > migrations_dump.txt
-         
+            cd /home/circleci/project/backend
+            ls -la /home/circleci/project/backend
+            npm install
+            npm run migrations > migrations_dump.txt
           
+            
   
           
 
