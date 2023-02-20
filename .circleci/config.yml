@@ -260,6 +260,12 @@ jobs:
           name: Configure server
           command: |
             ansible-playbook -i ~/project/inv/inventory.txt  ~/project/configure-server.yml
+      
+      - persist_to_workspace:
+
+          root: ~/project/inv
+          paths: 
+            - inventory.txt
 
       - destroy_environment_backend
 
@@ -330,7 +336,11 @@ jobs:
             echo "installing pyton3"
             sudo apt install python3
           
-      - run: ansible --version 
+      - run: ansible --version
+
+      - restore_cache:
+          keys: 
+            - frontend-build  
       
       - attach_workspace:
           at: ~/project/inv
@@ -391,6 +401,9 @@ jobs:
             sudo apt install ansible 
     
       - run: ansible --version 
+
+      - attach_workspace:
+          at: ~/project/inv
 
       - run:
           name: Configure server
