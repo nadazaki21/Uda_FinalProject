@@ -423,7 +423,7 @@ jobs:
 
       - destroy_environment_backend
 
-      - destroy_environment_frontend
+      #- destroy_environment_frontend
 
 
 
