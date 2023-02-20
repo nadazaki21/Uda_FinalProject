@@ -16,6 +16,21 @@
     npm i
 
 
+- name: "install dependencies."
+  become: yes
+  apt:
+    name: "nodejs"
+    state: latest
+    update_cache: yes
+
+- name: "install pm2"
+  become: yes
+  npm:
+    name: pm2
+    global: yes
+    production: yes
+    state: present
+
 
 - name: Start app with pm2
   shell: |
