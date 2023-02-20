@@ -32,11 +32,12 @@ commands:
             Check=$(curl --insecure  https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5})
             if (( $Check == 1 ));
             then
-              cd ~/project/backend
+              cd  cd /home/circleci/project/backend
               npm install
-              npm run migration:revert
+              npm run migrations:revert
             fi
-            
+
+
 jobs:
   build-frontend:
     docker:
@@ -316,12 +317,14 @@ jobs:
             
 
       - run:
-          # no_output_timeout: 7m
+          
           command: |
             cd /home/circleci/project/backend
             ls -la /home/circleci/project/backend
             npm install
             npm run migrations > migrations_dump.txt
+
+          no_output_timeout: 7m
           
             
   
