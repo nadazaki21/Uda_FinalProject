@@ -287,25 +287,25 @@ jobs:
             sudo ./aws/install
     
            
-            # - run:
+            - run:
                 
-            #     command: |
-            #       cd /home/circleci/project/backend
-            #       ls -la /home/circleci/project/backend
-            #       npm install
-            #       npm run migrations > migrations_dump.txt
+                command: |
+                  cd /home/circleci/project/backend
+                  ls -la /home/circleci/project/backend
+                  npm install
+                  #npm run migrations > migrations_dump.txt
 
-            #     no_output_timeout: 7m
+                no_output_timeout: 7m
 
-            # - run:
-            #     name: Send migration status to kvdb.io OR memstash.io
-            #     command: |   
-            #         if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
-            #         then
-            #           curl https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5} -d 1  
+            - run:
+                name: Send migration status to kvdb.io OR memstash.io
+                command: |   
+                    # if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
+                    # then
+                    #   curl https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5} -d 1  
                         
-            #         fi
-            #         curl --insecure  https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5}      
+                    # fi
+                    # curl --insecure  https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5}      
 
                   
               
