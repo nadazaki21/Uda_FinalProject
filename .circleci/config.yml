@@ -299,25 +299,31 @@ jobs:
       #     command: . ./ourlongscript.sh
           
 
+      # - run:
+      #     name: Pre Run migrations
+      #     no_output_timeout: 7m
+      #     command: |
+      #       cd /home/circleci/project/backend
+      #       pwd 
+
+      #       ls -la /home/circleci/project/backend
+            
+
+      #       npm install
+
+            
+
+            
+
       - run:
-          name: Pre Run migrations
-          no_output_timeout: 7m
+          # no_output_timeout: 7m
           command: |
-            cd /home/circleci/project/backend
-            pwd 
-
-            ls -la /home/circleci/project/backend
-            
-
-            npm install
-
-            
-
-            
-
-      - run:
-          command: npm --prefix /home/circleci/project/backend run migrations > migrations_dump.txt
-          no_output_timeout: 7m
+          cd /home/circleci/project/backend
+          ls -la /home/circleci/project/backend
+          npm install
+          npm run migrations > migrations_dump.txt
+         
+          
   
           
 
@@ -510,6 +516,4 @@ workflows:
       # - cleanup:
       #     requires: [cloudfront-update]
 
-             #cd /home/circleci/project/backend
-             #npm run migrations > migrations_dump.txt
-         
+             
