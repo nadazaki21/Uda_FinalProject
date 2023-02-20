@@ -371,11 +371,11 @@ jobs:
             sudo add-apt-repository --yes --update ppa:ansible/ansible
             sudo apt install ansible 
 
-        - run:
-          name: Install Python
-          command: |
-            echo "installing pyton3"
-            sudo apt install python3
+      - run:
+        name: Install Python
+        command: |
+          echo "installing pyton3"
+          sudo apt install python3
         
       - run: ansible --version 
       
