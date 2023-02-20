@@ -438,19 +438,19 @@ jobs:
       
 
       - run:
-        name: Use Ansible to copy the files.
-        command: |
-            cd ~/project/backend
-            npm i
-            npm run build
-            cd ..
-            pwd
-            # Zip the directory
-            tar -C backend -czvf artifact.tar.gz .
-            
-            echo "Contents  of the inventory.txt file is -------"
-            cat ~/project/inv/inventory.txt
-            ansible-playbook -i ~/project/inv/inventory.txt  ~/project/deploy-backend.yml
+          name: Use Ansible to copy the files.
+          command: |
+              cd ~/project/backend
+              npm i
+              npm run build
+              cd ..
+              pwd
+              # Zip the directory
+              tar -C backend -czvf artifact.tar.gz .
+              
+              echo "Contents  of the inventory.txt file is -------"
+              cat ~/project/inv/inventory.txt
+              ansible-playbook -i ~/project/inv/inventory.txt  ~/project/deploy-backend.yml
             
 
 
