@@ -292,46 +292,36 @@ jobs:
               unzip awscliv2.zip
               sudo ./aws/install
       
-      - run:
-          name: Pre Run migrations
-          no_output_timeout: 7m
-          command: |
-            cd /home/circleci/project/backend
-            pwd 
+      # - run:
+      #     name: Pre Run migrations
+      #     no_output_timeout: 7m
+      #     command: |
+      #       cd /home/circleci/project/backend
+      #       pwd 
 
-            ls -la /home/circleci/project/backend
+      #       ls -la /home/circleci/project/backend
             
 
-            npm install
-
-            
-
-            
-
-      - run:
+      #       npm install
+      # - run:
           
-          command: |
-            cd /home/circleci/project/backend
-            ls -la /home/circleci/project/backend
-            npm install
-            npm run migrations > migrations_dump.txt
+      #     command: |
+      #       cd /home/circleci/project/backend
+      #       ls -la /home/circleci/project/backend
+      #       npm install
+      #       npm run migrations > migrations_dump.txt
 
-          no_output_timeout: 7m
-          
-            
-  
-          
+      #     no_output_timeout: 7m
 
-
-      - run:
-          name: Send migration status to kvdb.io OR memstash.io
-          command: |   
-              if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
-              then
-                curl https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5} -d 1  
+      # - run:
+      #     name: Send migration status to kvdb.io OR memstash.io
+      #     command: |   
+      #         if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
+      #         then
+      #           curl https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5} -d 1  
                   
-              fi
-              curl --insecure  https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5}      
+      #         fi
+      #         curl --insecure  https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5}      
 
           
        
@@ -363,7 +353,7 @@ jobs:
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             sudo ./aws/install
-            
+
       - run:
           name: Install Ansible
           command: |
@@ -415,7 +405,7 @@ jobs:
 
 
   deploy-backend:
-     docker:
+    docker:
       - image: circleci/node:13.8.0
     steps:
       - checkout 
