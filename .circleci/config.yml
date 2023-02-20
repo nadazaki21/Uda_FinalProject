@@ -417,23 +417,46 @@ jobs:
             unzip awscliv2.zip
             sudo ./aws/install
 
-
-            echo " installing ansible"
+            # Ansible 
+            
             sudo apt install ansible 
 
             
       - run: ansible --version 
 
+      - restore_cache:
+          keys: 
+            - backend
+
       - attach_workspace:
           at: ~/project/inv
 
-      - run:
-          name: Configure server
+      # - run:
+      #     name: Configure server
+      #     command: |
+      #         ansible-playbook -i ~/project/inv/inventory.txt  ~/project/deploy-backend.yml
+      
+
+       - run:
+          name: Use Ansible to copy the files.
           command: |
+              cd ~/project/backend
+              npm i
+              npm run build
+              cd ..
+              pwd
+              # Zip the directory
+              tar -C backend -czvf artifact.tar.gz .
+              
+              echo "Contents  of the inventory.txt file is -------"
+              cat ~/project/inv/inventory.txt
               ansible-playbook -i ~/project/inv/inventory.txt  ~/project/deploy-backend.yml
+              
+
+
 
       - run:
-          name: Deploy backend
+          name: install pm2 
           command: |
               sudo npm i -g pm2
 
@@ -444,12 +467,14 @@ jobs:
                 pm2 stop default
                 pm2 start npm -- start
 
+
+
        
 
       - destroy_environment_backend
 
       - destroy_environment_frontend
-
+      - revert-migrations
 
 
 
