@@ -288,50 +288,47 @@ jobs:
               curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
               unzip awscliv2.zip
               sudo ./aws/install
-      # - run: 
-      #     command: . ./ourlongscript.sh
+      
+      - run:
+          name: Pre Run migrations
+          no_output_timeout: 7m
+          command: |
+            cd /home/circleci/project/backend
+            pwd 
+
+            ls -la /home/circleci/project/backend
+            
+
+            npm install
+
+            
+
+            
+
+      - run:
           
+          command: |
+            cd /home/circleci/project/backend
+            ls -la /home/circleci/project/backend
+            npm install
+            npm run migrations > migrations_dump.txt
 
-      # - run:
-      #     name: Pre Run migrations
-      #     no_output_timeout: 7m
-      #     command: |
-      #       cd /home/circleci/project/backend
-      #       pwd 
-
-      #       ls -la /home/circleci/project/backend
-            
-
-      #       npm install
-
-            
-
-            
-
-      # - run:
-          
-      #     command: |
-      #       cd /home/circleci/project/backend
-      #       ls -la /home/circleci/project/backend
-      #       npm install
-      #       npm run migrations > migrations_dump.txt
-
-      #     no_output_timeout: 7m
+          no_output_timeout: 7m
           
             
   
           
 
 
-      # - run:
-      #     name: Send migration status to kvdb.io OR memstash.io
-      #     command: |   
-      #         if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
-      #         then
-      #           curl https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5} -d 1  
+      - run:
+          name: Send migration status to kvdb.io OR memstash.io
+          command: |   
+              if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
+              then
+                curl https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5} -d 1  
                   
-      #         fi
-      #         curl --insecure  https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5}      
+              fi
+              curl --insecure  https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5}      
 
           
        
@@ -393,7 +390,7 @@ jobs:
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
             cat frontend/.env
 
-            
+
       - run:
           name: Deploy frontend objects
           command: |
@@ -424,12 +421,12 @@ jobs:
             
             - "55:f3:3d:67:45:24:b3:9f:b8:17:3f:c4:75:fd:e2:07"
       
-      - run:  sudo apt install tar gzip #yum install -y tar gzip
+      - run:  sudo apt install tar gzip 
       - run:
           name: Install dependencies
           command: |
               
-            sudo apt install tar ggzip
+            
             echo "installing AWS CLI "
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
@@ -447,6 +444,11 @@ jobs:
             npm install
             pm2 stop default
             pm2 start npm -- start
+
+      - run:
+          name: Configure server
+          command: |
+            ansible-playbook -i ~/project/inv/inventory.txt  ~/project/deploy-backend.yml
 
        
 
