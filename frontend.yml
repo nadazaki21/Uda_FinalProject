@@ -12,7 +12,7 @@ Resources:
   WebsiteBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: n1510
+      BucketName: uda-n15
       AccessControl: PublicRead
       WebsiteConfiguration:
         IndexDocument: index.html
