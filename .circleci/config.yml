@@ -398,7 +398,7 @@ jobs:
 
   deploy-backend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/base:stable
     steps:
       - checkout 
       - add_ssh_keys:
@@ -420,7 +420,7 @@ jobs:
             # install Ansible
             sudo apt update
             sudo apt install software-properties-common -y
-            # sudo add-apt-repository --yes --update ppa:ansible/ansible
+            sudo add-apt-repository --yes --update ppa:ansible/ansible
             sudo apt install ansible -y    
 
             # install node js
@@ -435,7 +435,10 @@ jobs:
       - restore_cache:
           keys: 
             - backend
+      
 
+      - run: pwd 
+      - run: la -la 
       - attach_workspace:
           at: ~/project/inv
 
@@ -443,11 +446,11 @@ jobs:
       - run:
           name: packging backend
           command: |
-            cd  ~/backend
+            cd  backend
             npm install
             npm run build
             tar -czf artifact.tar.gz dist/* package*
-            cd ~/
+            cd ..
             cp backend/artifact.tar.gz  roles/deploy/files
 
       - run:
