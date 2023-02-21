@@ -433,15 +433,27 @@ jobs:
       - attach_workspace:
           at: ~/project/inv
 
-      # - run:
-      #     name: Configure server
-      #     command: |
-      #         ansible-playbook -i ~/project/inv/inventory.txt  ~/project/deploy-backend.yml
       
+      - run:
+          name: packging backend
+          command: |
+            cd backend
+            npm install
+            npm run build
+            tar -czf artifact.tar.gz dist/* package*
+            cd ..
+            cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files
 
       - run:
-          name: Use Ansible to copy the files.
+          name: Deploy Backend 
           command: |
+
+              export TYPEORM_MIGRATIONS_DIR=./migrations
+              export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
+              export TYPEORM_MIGRATIONS=./migrations/*.ts
+
+
+
               cd ~/project/backend
               npm i
               npm run build
@@ -540,21 +552,59 @@ jobs:
 
 
 
-#   cloudfront-update:
-#     docker:  amazon/aws-cli 
-#       # Docker image here that supports AWS CLI
-#     steps:
-#       # Checkout code from git
-#       - run:
-#           name: Install dependencies
-#           command: |
+  #UdaPeople uses the “Blue-Green Deployment Strategy” which means we deployed a second environment or stack next to our existing production stack
+
+
+  cloudfront-update:
+
+    docker:
+      - image: amazon/aws-cli 
+      
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
             
-            
-#       - run:
-#           name: Update cloudfront distribution
-#           command: |
-#             # your code here
-#       # Here's where you will add some code to rollback on failure  
+            # install node js
+            curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+            sudo apt install -y nodejs
+            sudo npm install --global n
+            sudo n 13.8.0
+      
+      - run:
+          name: Get old stack workflow id and Save it
+          command: |
+            export OldWorkflowID=$(aws cloudformation \
+                    list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+                    --no-paginate --output text)
+            echo OldWorkflowID: "${OldWorkflowID}"
+            echo Current_CIRCLE_WORKFLOW_ID: "${CIRCLE_WORKFLOW_ID:0:5}"
+            echo $OldWorkflowID > ~/OldWorkflowID.txt
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - OldWorkflowID.txt
+      
+      - run: cat ~/OldWorkflowID.txt
+
+      - run:
+          name: Update cloudfront distribution
+          command: |
+            aws cloudformation deploy \
+            --template-file cloudfront.yml \
+            --stack-name InitialStack2 \
+            --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:5}" \
+            --tags project=udapeople
+
+      - destroy_environment_backend
+
+      - destroy_environment_frontend
+
+      - revert-migrations  
+
+
+
 
 # cleanup:
 #     docker:
