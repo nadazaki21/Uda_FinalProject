@@ -404,11 +404,11 @@ jobs:
       - add_ssh_keys:
               
           fingerprints: 
-            
+            s
             - "55:f3:3d:67:45:24:b3:9f:b8:17:3f:c4:75:fd:e2:07"
       
       - attach_workspace:
-        at: ~/project/inv
+          at: ~/project/inv
 
 
       - restore_cache:
