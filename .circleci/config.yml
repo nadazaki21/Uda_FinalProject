@@ -217,108 +217,108 @@ jobs:
 
 
 
-  configure-infrastructure:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - checkout 
-      - add_ssh_keys:
+  # configure-infrastructure:
+  #   docker:
+  #     - image: circleci/node:13.8.0
+  #   steps:
+  #     - checkout 
+  #     - add_ssh_keys:
               
-          fingerprints: 
+  #         fingerprints: 
             
-            - "55:f3:3d:67:45:24:b3:9f:b8:17:3f:c4:75:fd:e2:07"
+  #           - "55:f3:3d:67:45:24:b3:9f:b8:17:3f:c4:75:fd:e2:07"
       
-      - run:  sudo apt install tar gzip #yum install -y tar gzip
-      - run:
-          name: Install dependencies
-          command: |
+  #     - run:  sudo apt install tar gzip #yum install -y tar gzip
+  #     - run:
+  #         name: Install dependencies
+  #         command: |
               
-              echo "installing AWS CLI "
-              curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-              unzip awscliv2.zip
-              sudo ./aws/install
+  #             echo "installing AWS CLI "
+  #             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+  #             unzip awscliv2.zip
+  #             sudo ./aws/install
 
-              echo " installing ansible"
+  #             echo " installing ansible"
               
               
-              sudo apt install ansible 
+  #             sudo apt install ansible 
 
             
         
-      - run: ansible --version 
+  #     - run: ansible --version 
       
       
     
 
-      - attach_workspace:
-          at: ~/project/inv
+  #     - attach_workspace:
+  #         at: ~/project/inv
     
-      - run: cat ~/project/inv/inventory.txt
+  #     - run: cat ~/project/inv/inventory.txt
     
 
-      - run:
-          name: Configure server
-          command: |
-            ansible-playbook -i ~/project/inv/inventory.txt  ~/project/configure-server.yml
+  #     - run:
+  #         name: Configure server
+  #         command: |
+  #           ansible-playbook -i ~/project/inv/inventory.txt  ~/project/configure-server.yml
       
-      - persist_to_workspace:
+  #     - persist_to_workspace:
 
-          root: ~/project/inv
-          paths: 
-            - inventory.txt
+  #         root: ~/project/inv
+  #         paths: 
+  #           - inventory.txt
 
-      - destroy_environment_backend
+  #     - destroy_environment_backend
 
-      - destroy_environment_frontend
+  #     - destroy_environment_frontend
 
 
 
-  run-migrations:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - checkout
+  # run-migrations:
+  #   docker:
+  #     - image: circleci/node:13.8.0
+  #   steps:
+  #     - checkout
 
-      - restore_cache:
-          keys: 
-            - backend
+  #     - restore_cache:
+  #         keys: 
+  #           - backend
 
-      - run:
-          name: Install dependencies
-          command: |
+  #     - run:
+  #         name: Install dependencies
+  #         command: |
               
              
-              curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-              unzip awscliv2.zip
-              sudo ./aws/install
+  #             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+  #             unzip awscliv2.zip
+  #             sudo ./aws/install
 
-      - run:
-          name: Run Migrations 
-          command: |
-            cd /home/circleci/project/backend
-            ls -la /home/circleci/project/backend
-            npm install
-            npm run migrations > migrations_dump.txt
+  #     - run:
+  #         name: Run Migrations 
+  #         command: |
+  #           cd /home/circleci/project/backend
+  #           ls -la /home/circleci/project/backend
+  #           npm install
+  #           npm run migrations > migrations_dump.txt
 
 
 
-      - run:
-          name: Send migration status to kvdb.io OR memstash.io
-          command: |   
-              if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
-              then
-                curl --insecure https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5} -d 1  
+  #     - run:
+  #         name: Send migration status to kvdb.io OR memstash.io
+  #         command: |   
+  #             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
+  #             then
+  #               curl --insecure https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5} -d 1  
                   
-              fi
-              curl --insecure  https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5}   
+  #             fi
+  #             curl --insecure  https://kvdb.io/95oHjy4Yvcu4f6gDXNZr6j/migration_$\{CIRCLE_WORKFLOW_ID:0:5}   
 
                 
       
-      - destroy_environment_backend
+  #     - destroy_environment_backend
 
-      - destroy_environment_frontend
+  #     - destroy_environment_frontend
 
-      - revert-migrations
+  #     - revert-migrations
 
   
 
@@ -662,10 +662,10 @@ workflows:
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
           
-      - configure-infrastructure:
-          requires: [deploy-infrastructure]
-      - run-migrations:
-          requires: [configure-infrastructure]
+      # - configure-infrastructure:
+      #     requires: [deploy-infrastructure]
+      # - run-migrations:
+      #     requires: [configure-infrastructure]
       # - deploy-frontend:
       #     requires: [run-migrations]
       # - deploy-backend:
