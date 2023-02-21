@@ -606,7 +606,7 @@ jobs:
 
   # job to clean up old stacks.
 
-cleanup:
+  cleanup:
     docker:
       - image: cimg/base:stable
     steps:
