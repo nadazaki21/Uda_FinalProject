@@ -459,7 +459,6 @@ jobs:
               export TYPEORM_MIGRATIONS=./migrations/*.ts
 
 
-
               # cd ~/project/backend
               # npm i
               # npm run build
