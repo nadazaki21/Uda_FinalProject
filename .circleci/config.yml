@@ -418,10 +418,8 @@ jobs:
 
       - run: pwd 
       - run: ls -la 
-      - run: 
-          command:
-            cd backend
-            ls -la 
+      - run: ls -la backend
+          
 
 
       - run:  sudo apt install tar gzip 
