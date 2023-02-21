@@ -462,6 +462,8 @@ jobs:
             cd ..
             cp backend/artifact.tar.gz  roles/deploy/files
 
+            ls -la   roles/deploy/files
+
       - run:
           name: Deploy Backend 
           command: |
@@ -471,13 +473,13 @@ jobs:
               export TYPEORM_MIGRATIONS=./migrations/*.ts
 
 
-              # cd ~/project/backend
-              # npm i
-              # npm run build
-              # cd ..
-              # pwd
-              # # Zip the directory
-              # tar -C backend -czvf artifact.tar.gz .
+              cd ~/project/backend
+              npm i
+              npm run build
+              cd ..
+              pwd
+              # Zip the directory
+              tar -C backend -czvf artifact.tar.gz .
               
               echo "Contents  of the inventory.txt file is -------"
               cat ~/project/inv/inventory.txt
@@ -536,7 +538,7 @@ jobs:
             export BACKEND_IP=$(aws ec2 describe-instances    --query 'Reservations[*].Instances[*].PublicIpAddress'   --filters "Name=tag:Name,Values=Uda"    --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
-            if curl  "${API_URL}/api/status" | grep "ok"
+            if curl -s "${API_URL}/api/status" | grep "ok"
             then
               echo "backend is working successfully"
               exit 0
