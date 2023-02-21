@@ -404,7 +404,7 @@ jobs:
       - add_ssh_keys:
               
           fingerprints: 
-            s
+            
             - "55:f3:3d:67:45:24:b3:9f:b8:17:3f:c4:75:fd:e2:07"
       
       - attach_workspace:
@@ -418,7 +418,10 @@ jobs:
 
       - run: pwd 
       - run: ls -la 
-     
+      - run: 
+          command:
+            cd backend
+            ls -la 
 
 
       - run:  sudo apt install tar gzip 
@@ -452,6 +455,7 @@ jobs:
           name: packging backend
           command: |
             cd  backend
+            pwd
             npm install
             npm run build
             tar -czf artifact.tar.gz dist/* package*
