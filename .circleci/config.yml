@@ -651,7 +651,7 @@ jobs:
             aws cloudformation deploy \
             --template-file cloudfront.yml \
             --stack-name InitialStack2 \
-            --parameter-overrides WorkflowID="udaproject-${CIRCLE_WORKFLOW_ID:0:5}" \
+            
             --tags project=udapeople
 
       - destroy_environment_backend
@@ -753,3 +753,7 @@ workflows:
           #   # your code here
           #   export OldWorkflowID="the id here"
           #   export STACKS=[] #put the list of stacks here
+
+
+
+          #--parameter-overrides WorkflowID="udaproject-${CIRCLE_WORKFLOW_ID:0:5}" \
