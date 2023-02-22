@@ -227,6 +227,9 @@ jobs:
           fingerprints: 
             
             - "55:f3:3d:67:45:24:b3:9f:b8:17:3f:c4:75:fd:e2:07"
+
+      - attach_workspace:
+          at: ~/project/inv
       
       - run:  sudo apt install tar gzip #yum install -y tar gzip
       - run:
@@ -250,8 +253,7 @@ jobs:
       
     
 
-      - attach_workspace:
-          at: ~/project/inv
+      
     
       - run: cat ~/project/inv/inventory.txt
     
@@ -639,6 +641,8 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout 
+      - attach_workspace:
+          at: ~/project/inv
       - attach_workspace:
           at: ~/
 
