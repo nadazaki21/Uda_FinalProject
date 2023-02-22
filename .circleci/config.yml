@@ -346,74 +346,74 @@ jobs:
 
   
 
-  # deploy-frontend:
-  #   docker:
-  #     - image: circleci/node:13.8.0
-  #   steps:
-  #     - checkout 
-  #     - add_ssh_keys:
+  deploy-frontend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout 
+      - add_ssh_keys:
               
-  #         fingerprints: 
+          fingerprints: 
             
-  #           - "55:f3:3d:67:45:24:b3:9f:b8:17:3f:c4:75:fd:e2:07"
+            - "55:f3:3d:67:45:24:b3:9f:b8:17:3f:c4:75:fd:e2:07"
       
-  #     - run:
-  #         name: Install awscli
-  #         command: |
-  #           sudo apt install -y tar gzip
-  #           echo "installing AWS CLI "
-  #           curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-  #           unzip awscliv2.zip
-  #           sudo ./aws/install
+      - run:
+          name: Install awscli
+          command: |
+            sudo apt install -y tar gzip
+            echo "installing AWS CLI "
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
 
-  #     - run:
-  #         name: Install Ansible
-  #         command: |
+      - run:
+          name: Install Ansible
+          command: |
             
-  #           sudo apt install ansible 
+            sudo apt install ansible 
 
-  #     - run:
-  #         name: Install Python
-  #         command: |
-  #           echo "installing pyton3"
-  #           sudo apt install python3
+      - run:
+          name: Install Python
+          command: |
+            echo "installing pyton3"
+            sudo apt install python3
           
-  #     - run: ansible --version
+      - run: ansible --version
 
-  #     - restore_cache:
-  #         keys: 
-  #           - frontend-build  
+      - restore_cache:
+          keys: 
+            - frontend-build  
       
-  #     - attach_workspace:
-  #         at: ~/project/inv
+      - attach_workspace:
+          at: ~/project/inv
     
-  #     - run: cat ~/project/inv/inventory.txt
-  #     - run:
-  #         name: Get backend url
-  #         command: |
+      - run: cat ~/project/inv/inventory.txt
+      - run:
+          name: Get backend url
+          command: |
             
-  #           export BACKEND_IP=$(aws ec2 describe-instances    --query 'Reservations[*].Instances[*].PublicIpAddress'   --filters "Name=tag:Name,Values=Uda"    --output text)
-  #           export API_URL="http://${BACKEND_IP}:3030"
-  #           echo "API_URL = ${API_URL}"
-  #           echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
-  #           cat frontend/.env
+            export BACKEND_IP=$(aws ec2 describe-instances    --query 'Reservations[*].Instances[*].PublicIpAddress'   --filters "Name=tag:Name,Values=Uda"    --output text)
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "API_URL = ${API_URL}"
+            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
+            cat frontend/.env
 
 
-  #     - run:
-  #         name: Deploy frontend objects
-  #         command: |
-  #           cd /home/circleci/project/frontend
-  #           npm install
-  #           npm run build
-  #           tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:5}".tar.gz dist
-  #           aws s3 cp dist s3://uda-fp23 --recursive
+      - run:
+          name: Deploy frontend objects
+          command: |
+            cd /home/circleci/project/frontend
+            npm install
+            npm run build
+            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:5}".tar.gz dist
+            aws s3 cp dist s3://uda-fp23 --recursive
 
 
-  #     - destroy_environment_backend
+      - destroy_environment_backend
 
-  #     - revert-migrations
+      - revert-migrations
 
-  #     - destroy_environment_frontend
+      - destroy_environment_frontend
 
   
 
@@ -609,14 +609,19 @@ jobs:
   cloudfront-update:
 
     docker:
-      - image: amazon/aws-cli 
+      - image: cimg/base:stable
       
     steps:
       - checkout
       - run:
           name: Install dependencies
           command: |
-            
+            sudo apt install tar gzip
+            # install AWS CLI
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+
             # install node js
             curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
             sudo apt install -y nodejs
@@ -721,12 +726,12 @@ workflows:
           requires: [deploy-infrastructure]
       - run-migrations:
           requires: [configure-infrastructure]
-      # - deploy-frontend:
-      #     requires: [run-migrations]
+      - deploy-frontend:
+          requires: [run-migrations]
       - deploy-backend:
           requires: [run-migrations]
       - smoke-test:
-          requires: [deploy-backend]   #requires: [deploy-backend, deploy-frontend]
+          requires: [deploy-backend,deploy-frontend]  
       - cloudfront-update:
           requires: [smoke-test]
       - cleanup:
