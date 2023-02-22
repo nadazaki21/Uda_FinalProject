@@ -19,6 +19,12 @@
     name: npm
     state: present
 
+- name: Install pm2
+  npm:
+    name: pm2
+    global: yes
+
+
 
 # - name: "update apt packages."
 #   become: yes
