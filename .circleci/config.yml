@@ -454,11 +454,13 @@ jobs:
             pwd
             npm install
             npm run build
+            ls -la 
             tar -czf artifact.tar.gz dist/* package*
             cd ..
+            
             cp backend/artifact.tar.gz  roles/deploy/files
 
-            ls -la   roles/deploy/files
+            ls -la  roles/deploy/files
 
       - run:
           name: Deploy Backend 
