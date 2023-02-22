@@ -272,7 +272,7 @@ jobs:
 
   configure-infrastructure:
     docker:
-      - image: python:3.9-alpine3.16
+      - image: python:3.9-alpine3.16  #has no SSH 
     steps:
       - checkout
       - add_ssh_keys:
