@@ -116,7 +116,8 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [backend-test]
+          keys: 
+            - backend
       - run:
           name: Back-end test
           command: |
@@ -124,8 +125,9 @@ jobs:
             npm install
             npm run test
       - save_cache:
-          paths: [backend/node_modules]
-          key: backend-test
+          key: backend 
+          paths: 
+            - /home/circleci/project/backend/node_modules
             
   scan-frontend:
     docker:
@@ -486,6 +488,8 @@ jobs:
             cp backend/artifact.tar.gz  roles/deploy/files
 
             cd  /home/circleci/project/roles/deploy
+
+            ls -la  
 
             cd  files
 
