@@ -458,12 +458,12 @@ jobs:
             tar -czf artifact.tar.gz dist/* package*
 
             ls -la 
-            
+
             cd ..
             
             cp backend/artifact.tar.gz  roles/deploy/files
 
-            cd  ~/project/roles/deploy/files
+            cd  /home/circleci/project/roles/deploy/files  
 
             ls -la  
 
