@@ -599,9 +599,6 @@ jobs:
 
 
 
-
-
-
   #UdaPeople uses the “Blue-Green Deployment Strategy” which means we deployed a second environment or stack next to our existing production stack
 
 
