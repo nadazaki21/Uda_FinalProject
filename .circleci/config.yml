@@ -456,12 +456,17 @@ jobs:
             npm run build
             ls -la 
             tar -czf artifact.tar.gz dist/* package*
+
+            ls -la 
+            
             cd ..
             
             cp backend/artifact.tar.gz  roles/deploy/files
 
-            ls -la  roles/deploy/files
-            
+            cd  ~/project/roles/deploy/files
+
+            ls -la  
+
 
       - run:
           name: Deploy Backend 
