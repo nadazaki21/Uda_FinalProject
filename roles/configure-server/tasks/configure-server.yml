@@ -1,35 +1,48 @@
 ---  
 
 
-- name: "update apt packages."
-  become: yes
+
+
+- name: Update packages
   apt:
-    update_cache: yes
-
-- name: "upgrade packages"
-  become: yes
-  apt:
-    upgrade: yes
-
-
-
-- name: "install dependencies."
-  become: yes
-  apt:
-    name: ["nodejs", "npm"]
+    name: "*"
     state: latest
     update_cache: yes
 
-- name: "install pm2"
-  become: yes
-  npm:
-    name: pm2
-    global: yes
-    production: yes
+- name: Install Node.js
+  apt:
+    name: nodejs
+    state: present
+
+- name: Install npm
+  apt:
+    name: npm
     state: present
 
 
-- name: Install Python
-  package:
-    name: python3
-    state: present
+# - name: "update apt packages."
+#   become: yes
+#   apt:
+#     update_cache: yes
+
+# - name: "upgrade packages"
+#   become: yes
+#   apt:
+#     upgrade: yes
+
+
+
+# - name: "install dependencies."
+#   become: yes
+#   apt:
+#     name: ["nodejs", "npm"]
+#     state: latest
+#     update_cache: yes
+
+# - name: "install pm2"
+#   become: yes
+#   npm:
+#     name: pm2
+#     global: yes
+#     production: yes
+#     state: present

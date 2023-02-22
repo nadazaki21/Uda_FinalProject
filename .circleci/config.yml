@@ -465,6 +465,8 @@ jobs:
 
             cd  /home/circleci/project/roles/deploy
 
+            cd  files
+
             ls -la  
 
 

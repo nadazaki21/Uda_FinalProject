@@ -18,6 +18,12 @@
       pause:
         seconds: 120     # 120 seconds is enough
 
+
+    - name: Install Python
+      package:
+        name: python3
+        state: present
+
     
 
 
