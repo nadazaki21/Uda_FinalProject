@@ -623,8 +623,6 @@ jobs:
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             sudo ./aws/install
-
-           
       
       - run:
           name: Get old stack workflow id and Save it
@@ -632,7 +630,7 @@ jobs:
             # export OldWorkflowID=$(aws cloudformation \
             #         list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
             #         --no-paginate --output text)
-            
+
             OldWorkflowID=$(aws cloudformation \
                     list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
                     --no-paginate --output text)        
