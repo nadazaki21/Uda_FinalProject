@@ -220,56 +220,6 @@ jobs:
 
 
 
-  # configure-infrastructure:
-  #   docker:
-  #     - image: circleci/node:13.8.0
-  #   steps:
-  #     - checkout 
-  #     - add_ssh_keys:
-              
-  #         fingerprints: 
-            
-  #           - "55:f3:3d:67:45:24:b3:9f:b8:17:3f:c4:75:fd:e2:07"
-
-  #     - attach_workspace:
-  #         at: ~/project/inv
-      
-  #     - run:  sudo apt install tar gzip #yum install -y tar gzip
-  #     - run:
-  #         name: Install dependencies
-  #         command: |
-              
-  #             echo "installing AWS CLI "
-  #             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-  #             unzip awscliv2.zip
-  #             sudo ./aws/install
-
-  #             echo " installing ansible"
-              
-              
-  #             sudo apt install ansible 
-
-            
-        
-  #     - run: ansible --version 
-  #     - run: cat ~/project/inv/inventory.txt
-    
-
-  #     - run:
-  #         name: Configure server
-  #         command: |
-  #           ansible-playbook -i ~/project/inv/inventory.txt  ~/project/configure-server.yml
-      
-  #     - persist_to_workspace:
-
-  #         root: ~/project/inv
-  #         paths: 
-  #           - inventory.txt
-
-  #     - destroy_environment_backend
-
-  #     - destroy_environment_frontend
-
 
   configure-infrastructure:
     docker:
@@ -508,14 +458,6 @@ jobs:
               export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
               export TYPEORM_MIGRATIONS=./migrations/*.ts
 
-
-              # cd ~/project/backend
-              # npm i
-              # npm run build
-              # cd ..
-              # pwd
-              # # Zip the directory
-              # tar -C backend -czvf artifact.tar.gz .
               
               echo "Contents  of the inventory.txt file is -------"
               cat ~/project/inv/inventory.txt
@@ -550,7 +492,7 @@ jobs:
 
 
 
-  smoke-test:  #u do a “smoke test” by going to the site and making sure you can still log in or navigate around. You might do a quick curl on the backend to make sure it is responding. ////code to make a simple test on both frontend and backend
+  smoke-test:  # do a “smoke test” by going to the site and making sure you can still log in or navigate around. You might do a quick curl on the backend to make sure it is responding. ////code to make a simple test on both frontend and backend
     docker:
       - image: cimg/base:stable
     steps:
@@ -683,9 +625,6 @@ jobs:
           name: Remove old stacks and files
           command: |
               OldWorkflowID=$(cat ~/OldWorkflowID.txt)
-              
-              
-          
               export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
                       --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
               echo Stack names: "${STACKS[@]}"       
@@ -739,18 +678,4 @@ workflows:
 
 
 
-      # echo " installingg ansible"
-      #       sudo apt install software-properties-common 
-      #       sudo add-apt-repository --yes --update ppa:ansible/ansible
-
-
-          #         - run:
-          # name: Get old stack workflow id
-          # command: |
-          #   # your code here
-          #   export OldWorkflowID="the id here"
-          #   export STACKS=[] #put the list of stacks here
-
-
-
-          #--parameter-overrides WorkflowID="udaproject-${CIRCLE_WORKFLOW_ID:0:5}" \
+      
