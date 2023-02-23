@@ -34,8 +34,8 @@ Resources:
       InstanceType: t2.micro
       SecurityGroups:
         - Ref: InstanceSecurityGroup
-      KeyName: udacity 
-      ImageId: ami-09cd747c78a9add63
+      KeyName: none
+      ImageId: ami-09cd747c7
       Tags:
         - Key: Name
           Value: Uda
@@ -46,3 +46,7 @@ Resources:
     Properties:
       Domain: vpc
       InstanceId: !Ref EC2Instance
+
+
+      # KeyName: udacity 
+      # ImageId: ami-09cd747c78a9add63
