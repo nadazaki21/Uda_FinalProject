@@ -17,7 +17,7 @@ commands:
            name: Destroy environment 
            when: on_fail
            command: |
-             aws s3 rm s3://uda-fp23 --recursive 
+             #aws s3 rm s3://uda-fp23 --recursive 
              aws cloudformation delete-stack --stack-name frontend-${CIRCLE_WORKFLOW_ID:0:5}
              
 
