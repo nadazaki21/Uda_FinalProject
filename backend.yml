@@ -26,8 +26,8 @@ Resources:
           FromPort: 9100  # For Prometheus
           ToPort: 9100
           CidrIp: 0.0.0.0/0
-   
-      
+
+
 
   EC2Instance:
     Type: AWS::EC2::Instance
@@ -35,8 +35,8 @@ Resources:
       InstanceType: t2.micro
       SecurityGroups:
         - Ref: InstanceSecurityGroup
-      KeyName: none
-      ImageId: ami-09cd747c7
+      KeyName: udacity 
+      ImageId: ami-09cd747c78a9add63
       Tags:
         - Key: Name
           Value: Uda
@@ -49,5 +49,4 @@ Resources:
       InstanceId: !Ref EC2Instance
 
 
-      # KeyName: udacity 
-      # ImageId: ami-09cd747c78a9add63
+    
