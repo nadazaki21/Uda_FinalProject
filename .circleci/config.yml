@@ -633,7 +633,7 @@ jobs:
               then
                 echo "------------------ Deleting old Envirments ------------------"
                 aws cloudformation delete-stack --stack-name "backend-${OldWorkflowID}"
-                aws s3 rm s3://uda-fp23-${CIRCLE_WORKFLOW_ID:0:5} --recursive
+                aws s3 rm s3://uda-fp23-${OldWorkflowID} --recursive
                 aws cloudformation delete-stack --stack-name "frontend-${OldWorkflowID}"
               else
                 echo "------------------ Nothing to Delete/Can't Delete ------------------"  
