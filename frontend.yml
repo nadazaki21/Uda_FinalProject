@@ -12,7 +12,7 @@ Resources:
   WebsiteBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: uda-fp23-${ID}
+      BucketName: !Sub uda-fp23-${ID}
       AccessControl: PublicRead
       WebsiteConfiguration:
         IndexDocument: index.html
