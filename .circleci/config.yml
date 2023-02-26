@@ -214,7 +214,7 @@ jobs:
       - run: ls   
   
       
-      - destroy_environment_backend
+      #- destroy_environment_backend
 
       - destroy_environment_frontend
 
