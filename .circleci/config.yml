@@ -17,7 +17,7 @@ commands:
            name: Destroy environment 
            when: on_fail
            command: |
-             #aws s3 rm s3://uda-fp23 --recursive 
+             #aws s3 rm s3://uda-fp23-${CIRCLE_WORKFLOW_ID:0:5} --recursive 
              aws cloudformation delete-stack --stack-name frontend-${CIRCLE_WORKFLOW_ID:0:5}
              
 
@@ -214,7 +214,7 @@ jobs:
       - run: ls   
   
       
-      #- destroy_environment_backend
+      - destroy_environment_backend
 
       - destroy_environment_frontend
 
@@ -358,7 +358,7 @@ jobs:
             npm install
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:5}".tar.gz dist
-            aws s3 cp dist s3://uda-fp23 --recursive
+            aws s3 cp dist s3://uda-fp23-${CIRCLE_WORKFLOW_ID:0:5} --recursive
 
 
       - destroy_environment_backend
@@ -633,7 +633,7 @@ jobs:
               then
                 echo "------------------ Deleting old Envirments ------------------"
                 aws cloudformation delete-stack --stack-name "backend-${OldWorkflowID}"
-                aws s3 rm s3://uda-fp23 --recursive
+                aws s3 rm s3://uda-fp23-${CIRCLE_WORKFLOW_ID:0:5} --recursive
                 aws cloudformation delete-stack --stack-name "frontend-${OldWorkflowID}"
               else
                 echo "------------------ Nothing to Delete/Can't Delete ------------------"  
