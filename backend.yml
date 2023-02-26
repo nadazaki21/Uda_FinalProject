@@ -39,7 +39,7 @@ Resources:
       ImageId: ami-09cd747c78a9add63
       Tags:
         - Key: Name
-          Value: Uda
+          Value: !Sub Uda-${ID}
   
 
   InstanceEIP:
